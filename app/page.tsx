@@ -1,25 +1,27 @@
 import { Redis } from '@upstash/redis';  
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';  
+import dynamic from 'next/dynamic';  
 
 export const dynamic = 'force-dynamic';  
 
 const redis = Redis.fromEnv();  
 
+const MetricsChart = dynamic(() => import('./components/MetricsChart'), { ssr: false });  
+
 export default async function Home() {  
-  let streams = 1; // Default  
-  let revenue = 25000; // Default  
-  let users = 100; // Default  
+  let streams = 1;  
+  let revenue = 25000;  
+  let users = 100;  
   try {  
     streams = (await redis.get<number>('novaos:streams:active')) || 1;  
     revenue = (await redis.get<number>('revenue')) || 25000;  
     users = (await redis.get<number>('users')) || 100;  
   } catch (error) {  
-    console.error('Redis fetch error:', error); // Log for Vercel monitoring  
+    console.error('Redis error:', error);  
   }  
 
   const chartData = [  
     { name: 'Streams', value: streams },  
-    { name: 'Revenue', value: revenue / 1000 }, // Scale for chart visibility  
+    { name: 'Revenue', value: revenue },  
     { name: 'Users', value: users },  
   ];  
 
@@ -41,12 +43,7 @@ export default async function Home() {
         </div>  
       </div>  
       <h2 className="text-xl font-bold mb-4">Metrics Overview</h2>  
-      <BarChart width={600} height={300} data={chartData}>  
-        <XAxis dataKey="name" />  
-        <YAxis domain={[0, 26]} ticks={[0, 6.5, 13, 19.5, 26]} /> // Scaled ticks  
-        <Tooltip />  
-        <Bar dataKey="value" fill="#8884d8" />  
-      </BarChart>  
+      <MetricsChart chartData={chartData} />  
     </main>  
   );  
 }  
