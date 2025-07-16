@@ -19,7 +19,7 @@ exports.modules = {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   GET: () => (/* binding */ GET)\n/* harmony export */ });\n/* harmony import */ var next_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/server */ \"(rsc)/./node_modules/next/dist/api/server.js\");\n\nasync function GET() {\n    const metrics = {\n        streamsActive: 1,\n        revenue: 25000,\n        users: 100,\n        lastUpdated: new Date().toISOString()\n    };\n    return next_server__WEBPACK_IMPORTED_MODULE_0__.NextResponse.json(metrics);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvYXBpL21ldHJpY3Mvcm91dGUudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBMkM7QUFFcEMsZUFBZUM7SUFDcEIsTUFBTUMsVUFBVTtRQUNkQyxlQUFlO1FBQ2ZDLFNBQVM7UUFDVEMsT0FBTztRQUNQQyxhQUFhLElBQUlDLE9BQU9DLFdBQVc7SUFDckM7SUFDQSxPQUFPUixxREFBWUEsQ0FBQ1MsSUFBSSxDQUFDUDtBQUMzQiIsInNvdXJjZXMiOlsiL1VzZXJzL2tyaXNzYW5kZXJzL0Rlc2t0b3Avbm92YW9zL2FnZW50cy9Ob3ZhRGFzaGJvYXJkL2FwcC9hcGkvbWV0cmljcy9yb3V0ZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBOZXh0UmVzcG9uc2UgfSBmcm9tICduZXh0L3NlcnZlcic7XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBHRVQoKSB7XG4gIGNvbnN0IG1ldHJpY3MgPSB7XG4gICAgc3RyZWFtc0FjdGl2ZTogMSxcbiAgICByZXZlbnVlOiAyNTAwMCxcbiAgICB1c2VyczogMTAwLFxuICAgIGxhc3RVcGRhdGVkOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCksXG4gIH07XG4gIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbihtZXRyaWNzKTtcbn1cbiJdLCJuYW1lcyI6WyJOZXh0UmVzcG9uc2UiLCJHRVQiLCJtZXRyaWNzIiwic3RyZWFtc0FjdGl2ZSIsInJldmVudWUiLCJ1c2VycyIsImxhc3RVcGRhdGVkIiwiRGF0ZSIsInRvSVNPU3RyaW5nIiwianNvbiJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./app/api/metrics/route.ts\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   GET: () => (/* binding */ GET)\n/* harmony export */ });\n/* harmony import */ var next_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/server */ \"(rsc)/./node_modules/next/dist/api/server.js\");\n/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ioredis */ \"(rsc)/./node_modules/ioredis/built/index.js\");\n/* harmony import */ var ioredis__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(ioredis__WEBPACK_IMPORTED_MODULE_1__);\n\n\nasync function GET() {\n    const redis = new (ioredis__WEBPACK_IMPORTED_MODULE_1___default())({\n        host: 'localhost',\n        port: 6379\n    });\n    const streamsActive = await redis.get('novaos:streams:active') || 1; // Fallback to 1\n    const metrics = {\n        streamsActive: Number(streamsActive),\n        revenue: 25000,\n        users: 100,\n        lastUpdated: new Date().toISOString()\n    };\n    redis.quit();\n    return next_server__WEBPACK_IMPORTED_MODULE_0__.NextResponse.json(metrics);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvYXBpL21ldHJpY3Mvcm91dGUudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUEyQztBQUNmO0FBRXJCLGVBQWVFO0lBQ3BCLE1BQU1DLFFBQVEsSUFBSUYsZ0RBQUtBLENBQUM7UUFBRUcsTUFBTTtRQUFhQyxNQUFNO0lBQUs7SUFDeEQsTUFBTUMsZ0JBQWdCLE1BQU1ILE1BQU1JLEdBQUcsQ0FBQyw0QkFBNEIsR0FBRyxnQkFBZ0I7SUFDckYsTUFBTUMsVUFBVTtRQUNkRixlQUFlRyxPQUFPSDtRQUN0QkksU0FBUztRQUNUQyxPQUFPO1FBQ1BDLGFBQWEsSUFBSUMsT0FBT0MsV0FBVztJQUNyQztJQUNBWCxNQUFNWSxJQUFJO0lBQ1YsT0FBT2YscURBQVlBLENBQUNnQixJQUFJLENBQUNSO0FBQzNCIiwic291cmNlcyI6WyIvVXNlcnMva3Jpc3NhbmRlcnMvRGVza3RvcC9ub3Zhb3MvYWdlbnRzL05vdmFEYXNoYm9hcmQvYXBwL2FwaS9tZXRyaWNzL3JvdXRlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IE5leHRSZXNwb25zZSB9IGZyb20gJ25leHQvc2VydmVyJztcbmltcG9ydCBSZWRpcyBmcm9tICdpb3JlZGlzJztcblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIEdFVCgpIHtcbiAgY29uc3QgcmVkaXMgPSBuZXcgUmVkaXMoeyBob3N0OiAnbG9jYWxob3N0JywgcG9ydDogNjM3OSB9KTtcbiAgY29uc3Qgc3RyZWFtc0FjdGl2ZSA9IGF3YWl0IHJlZGlzLmdldCgnbm92YW9zOnN0cmVhbXM6YWN0aXZlJykgfHwgMTsgLy8gRmFsbGJhY2sgdG8gMVxuICBjb25zdCBtZXRyaWNzID0ge1xuICAgIHN0cmVhbXNBY3RpdmU6IE51bWJlcihzdHJlYW1zQWN0aXZlKSxcbiAgICByZXZlbnVlOiAyNTAwMCxcbiAgICB1c2VyczogMTAwLFxuICAgIGxhc3RVcGRhdGVkOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCksXG4gIH07XG4gIHJlZGlzLnF1aXQoKTtcbiAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKG1ldHJpY3MpO1xufVxuIl0sIm5hbWVzIjpbIk5leHRSZXNwb25zZSIsIlJlZGlzIiwiR0VUIiwicmVkaXMiLCJob3N0IiwicG9ydCIsInN0cmVhbXNBY3RpdmUiLCJnZXQiLCJtZXRyaWNzIiwiTnVtYmVyIiwicmV2ZW51ZSIsInVzZXJzIiwibGFzdFVwZGF0ZWQiLCJEYXRlIiwidG9JU09TdHJpbmciLCJxdWl0IiwianNvbiJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./app/api/metrics/route.ts\n");
 
 /***/ }),
 
@@ -87,6 +87,72 @@ module.exports = require("next/dist/server/app-render/work-unit-async-storage.ex
 
 /***/ }),
 
+/***/ "assert":
+/*!*************************!*\
+  !*** external "assert" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ "buffer":
+/*!*************************!*\
+  !*** external "buffer" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("buffer");
+
+/***/ }),
+
+/***/ "crypto":
+/*!*************************!*\
+  !*** external "crypto" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "dns":
+/*!**********************!*\
+  !*** external "dns" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("dns");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ "net":
+/*!**********************!*\
+  !*** external "net" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
+
+/***/ }),
+
 /***/ "next/dist/compiled/next-server/app-page.runtime.dev.js":
 /*!*************************************************************************!*\
   !*** external "next/dist/compiled/next-server/app-page.runtime.dev.js" ***!
@@ -129,6 +195,83 @@ module.exports = require("next/dist/shared/lib/no-fallback-error.external");
 "use strict";
 module.exports = require("next/dist/shared/lib/router/utils/app-paths");
 
+/***/ }),
+
+/***/ "os":
+/*!*********************!*\
+  !*** external "os" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
+/***/ "stream":
+/*!*************************!*\
+  !*** external "stream" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ "string_decoder":
+/*!*********************************!*\
+  !*** external "string_decoder" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("string_decoder");
+
+/***/ }),
+
+/***/ "tls":
+/*!**********************!*\
+  !*** external "tls" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
+
+/***/ }),
+
+/***/ "tty":
+/*!**********************!*\
+  !*** external "tty" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tty");
+
+/***/ }),
+
+/***/ "url":
+/*!**********************!*\
+  !*** external "url" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ "util":
+/*!***********************!*\
+  !*** external "util" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
 /***/ })
 
 };
@@ -138,7 +281,7 @@ module.exports = require("next/dist/shared/lib/router/utils/app-paths");
 var __webpack_require__ = require("../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2Fapi%2Fmetrics%2Froute&page=%2Fapi%2Fmetrics%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fmetrics%2Froute.ts&appDir=%2FUsers%2Fkrissanders%2FDesktop%2Fnovaos%2Fagents%2FNovaDashboard%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fkrissanders%2FDesktop%2Fnovaos%2Fagents%2FNovaDashboard&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/ioredis","vendor-chunks/debug","vendor-chunks/redis-errors","vendor-chunks/standard-as-callback","vendor-chunks/redis-parser","vendor-chunks/@ioredis","vendor-chunks/supports-color","vendor-chunks/ms","vendor-chunks/lodash.isarguments","vendor-chunks/lodash.defaults","vendor-chunks/has-flag","vendor-chunks/denque","vendor-chunks/cluster-key-slot"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2Fapi%2Fmetrics%2Froute&page=%2Fapi%2Fmetrics%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fmetrics%2Froute.ts&appDir=%2FUsers%2Fkrissanders%2FDesktop%2Fnovaos%2Fagents%2FNovaDashboard%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fkrissanders%2FDesktop%2Fnovaos%2Fagents%2FNovaDashboard&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!")));
 module.exports = __webpack_exports__;
 
 })();

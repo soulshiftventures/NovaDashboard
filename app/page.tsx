@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 export default function Home() {
   const [metrics, setMetrics] = useState({ streamsActive: 0, revenue: 0, users: 0 });
@@ -68,6 +68,7 @@ export default function Home() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
+            <Tooltip />
             <Bar dataKey="value" fill="#4CAF50" />
           </BarChart>
         </CardContent>
