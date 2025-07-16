@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 const redis = Redis.fromEnv();  
 
-const MetricsChart = NextDynamic(() => import('./components/MetricsChart'), { ssr: false });  
+const MetricsChart = NextDynamic(() => import('./components/MetricsChart'));  
 
 export default async function Home() {  
   let streams = 1;  
@@ -47,4 +47,3 @@ export default async function Home() {
     </main>  
   );  
 }  
-
