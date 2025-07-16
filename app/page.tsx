@@ -1,11 +1,11 @@
 import { Redis } from '@upstash/redis';  
-import dynamic from 'next/dynamic';  
+import NextDynamic from 'next/dynamic';  
 
 export const dynamic = 'force-dynamic';  
 
 const redis = Redis.fromEnv();  
 
-const MetricsChart = dynamic(() => import('./components/MetricsChart'), { ssr: false });  
+const MetricsChart = NextDynamic(() => import('./components/MetricsChart'), { ssr: false });  
 
 export default async function Home() {  
   let streams = 1;  
@@ -47,3 +47,4 @@ export default async function Home() {
     </main>  
   );  
 }  
+
