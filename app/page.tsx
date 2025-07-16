@@ -1,78 +1,52 @@
-'use client';
+import { Redis } from '@upstash/redis';  
+import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';  
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+export const dynamic = 'force-dynamic';  
 
-export default function Home() {
-  const [metrics, setMetrics] = useState({ streamsActive: 0, revenue: 0, users: 0 });
+const redis = Redis.fromEnv();  
 
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const res = await fetch('/api/metrics');
-        if (res.ok) {
-          const data = await res.json();
-          setMetrics(data);
-        }
-      } catch (error) {
-        console.error('Error fetching metrics:', error);
-      }
-    };
-    fetchMetrics();
-    const interval = setInterval(fetchMetrics, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
+export default async function Home() {  
+  let streams = 1; // Default  
+  let revenue = 25000; // Default  
+  let users = 100; // Default  
+  try {  
+    streams = (await redis.get<number>('novaos:streams:active')) || 1;  
+    revenue = (await redis.get<number>('revenue')) || 25000;  
+    users = (await redis.get<number>('users')) || 100;  
+  } catch (error) {  
+    console.error('Redis fetch error:', error); // Log for Vercel monitoring  
+  }  
 
-  const chartData = [
-    { name: 'Streams', value: metrics.streamsActive },
-    { name: 'Revenue', value: metrics.revenue },
-    { name: 'Users', value: metrics.users },
-  ];
+  const chartData = [  
+    { name: 'Streams', value: streams },  
+    { name: 'Revenue', value: revenue / 1000 }, // Scale for chart visibility  
+    { name: 'Users', value: users },  
+  ];  
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">NovaOS Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Streams</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl">{metrics.streamsActive}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Revenue ($)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl">{metrics.revenue}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl">{metrics.users}</p>
-          </CardContent>
-        </Card>
-      </div>
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Metrics Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BarChart width={500} height={300} data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" fill="#4CAF50" />
-          </BarChart>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+  return (  
+    <main className="p-8">  
+      <h1 className="text-2xl font-bold mb-4">NovaOS Dashboard</h1>  
+      <div className="grid grid-cols-3 gap-4 mb-8">  
+        <div className="p-4 border rounded">  
+          <h2>Active Streams</h2>  
+          <p className="text-4xl">{streams}</p>  
+        </div>  
+        <div className="p-4 border rounded">  
+          <h2>Revenue ($)</h2>  
+          <p className="text-4xl">{revenue}</p>  
+        </div>  
+        <div className="p-4 border rounded">  
+          <h2>Users</h2>  
+          <p className="text-4xl">{users}</p>  
+        </div>  
+      </div>  
+      <h2 className="text-xl font-bold mb-4">Metrics Overview</h2>  
+      <BarChart width={600} height={300} data={chartData}>  
+        <XAxis dataKey="name" />  
+        <YAxis domain={[0, 26]} ticks={[0, 6.5, 13, 19.5, 26]} /> // Scaled ticks  
+        <Tooltip />  
+        <Bar dataKey="value" fill="#8884d8" />  
+      </BarChart>  
+    </main>  
+  );  
+}  
